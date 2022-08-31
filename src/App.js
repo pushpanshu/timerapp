@@ -52,13 +52,13 @@ function App() {
     clearInterval(increment.current);
     setTimer(0);
     setTotalTimer(0);
-    // /setdata([]);
+    setdata([]);
   };
   const removeCard = (id) => {
     const filtered = data.filter((x) => x.uid !== id);
     setdata(filtered);
   };
-  console.log(data);
+
   return (
     <div class="container py-5 my-5">
       <div class="row">
