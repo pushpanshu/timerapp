@@ -11,7 +11,7 @@ function App() {
 
   useEffect(() => {
     if (timer >= totaltimer*1000) {
-      handleReset();
+      handleClear();
     }
   }, [timer]);
   function scrollToTop() {
@@ -53,6 +53,11 @@ function App() {
     setTimer(0);
     setTotalTimer(0);
     setdata([]);
+  };
+  const handleClear = () => {
+    clearInterval(increment.current);
+    setTimer(0);
+    setTotalTimer(0);
   };
   const removeCard = (id) => {
     const filtered = data.filter((x) => x.uid !== id);
