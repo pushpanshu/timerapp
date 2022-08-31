@@ -1,23 +1,94 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useRef, useState } from "react";
+import moment from "moment";
+import "./App.css";
+import Card from "./components/card";
+import { uid } from "uid";
 
 function App() {
+  const [timer, setTimer] = useState(0);
+  const [data, setdata] = useState([]);
+
+  const [totaltimer, setTotalTimer] = useState(0);
+  useEffect(() => {
+    if (timer >= totaltimer) {
+      handleReset();
+    }
+  }, [timer]);
+  function scrollToTop() {
+    var element = document.getElementById('list')
+    element.scrollTop = -element.scrollHeight
+}
+  useEffect(() => {
+    scrollToTop()
+  }, [data]);
+
+  const increment = useRef(null);
+  let date = null;
+  let tim = 0;
+  let update = function () {
+    tim = tim + 10;
+    date = moment(new Date());
+    setTimer(tim);
+    setdata((data) => [
+      ...data,
+      { date: date.format("DD/MM/YYYY hh:mm:ss"), rem: totaltimer - tim, uid: uid() },
+    ]);
+  };
+
+  const handleStart = () => {
+    update();
+    increment.current = setInterval(update, 10);
+  };
+  const handleReset = () => {
+    clearInterval(increment.current);
+    setTimer(0);
+    setTotalTimer(0);
+    setdata([]);
+  };
+  const removeCard =(id) =>{
+    const filtered = data.filter(x => x.uid !== id)
+    setdata(filtered)
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div class="container py-5 my-5">
+      <div class="row">
+        <div class="col-md-6 col-sm-6 ">
+          <div className="mx-height" id="list">
+            {data.map((item, index) => (
+              <Card key={item.uid} data={item} removeCard={removeCard} />
+            ))}
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-6 c2">
+          <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">
+              New Timer
+            </label>
+            <input
+              type="number"
+              value={totaltimer}
+              onChange={(e) => setTotalTimer(e.target.value)}
+              class="form-control rounded-0"
+            />
+            <div class="col-auto">
+              {timer <= 0? <button
+                onClick={handleStart}
+                type="button"
+                class="btn btn-secondary mt-2 px-4 mb-3 rounded-0 w-100"
+              >
+                Add
+              </button>:
+              <button
+                onClick={handleReset}
+                type="button"
+                class="btn btn-secondary mt-2 px-4 mb-3 rounded-0 w-100"
+              >
+                Stop
+              </button>}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
