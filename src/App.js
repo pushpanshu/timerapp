@@ -33,7 +33,7 @@ function App() {
     setdata((data) => [
       ...data,
       {
-        date: moment().format("DD/MM/YYYY hh:mm:ss"),
+        date: now.clone().format("DD/MM/YYYY hh:mm:ss"),
         rem: totaltimer*1000 - tim,
         uid: uid(),
       },
