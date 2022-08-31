@@ -41,6 +41,7 @@ function App() {
   };
 
   const handleStart = () => {
+    setdata([]);
     if (totaltimer) {
       update();
       increment.current = setInterval(update, 10);
