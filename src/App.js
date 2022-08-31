@@ -15,29 +15,38 @@ function App() {
     }
   }, [timer]);
   function scrollToTop() {
-    var element = document.getElementById('list')
-    element.scrollTop = -element.scrollHeight
-}
+    var element = document.getElementById("list");
+    element.scrollTop = -element.scrollHeight;
+  }
   useEffect(() => {
-    scrollToTop()
+    scrollToTop();
   }, [data]);
 
   const increment = useRef(null);
   let date = null;
   let tim = 0;
+  let now = moment();
   let update = function () {
     tim = tim + 10;
-    date = moment(new Date());
+    //date = moment(new Date());
     setTimer(tim);
     setdata((data) => [
       ...data,
-      { date: date.format("DD/MM/YYYY hh:mm:ss"), rem: totaltimer - tim, uid: uid() },
+      {
+        date: now.clone().format("DD/MM/YYYY hh:mm:ss"),
+        rem: totaltimer - tim,
+        uid: uid(),
+      },
     ]);
   };
 
   const handleStart = () => {
-    update();
-    increment.current = setInterval(update, 10);
+    if (totaltimer) {
+      update();
+      increment.current = setInterval(update, 10);
+    } else {
+      alert("Please Set Timer Value");
+    }
   };
   const handleReset = () => {
     clearInterval(increment.current);
@@ -45,10 +54,10 @@ function App() {
     setTotalTimer(0);
     setdata([]);
   };
-  const removeCard =(id) =>{
-    const filtered = data.filter(x => x.uid !== id)
-    setdata(filtered)
-  }
+  const removeCard = (id) => {
+    const filtered = data.filter((x) => x.uid !== id);
+    setdata(filtered);
+  };
   return (
     <div class="container py-5 my-5">
       <div class="row">
@@ -71,20 +80,23 @@ function App() {
               class="form-control rounded-0"
             />
             <div class="col-auto">
-              {timer <= 0? <button
-                onClick={handleStart}
-                type="button"
-                class="btn btn-secondary mt-2 px-4 mb-3 rounded-0 w-100"
-              >
-                Add
-              </button>:
-              <button
-                onClick={handleReset}
-                type="button"
-                class="btn btn-secondary mt-2 px-4 mb-3 rounded-0 w-100"
-              >
-                Stop
-              </button>}
+              {timer <= 0 ? (
+                <button
+                  onClick={handleStart}
+                  type="button"
+                  class="btn btn-secondary mt-2 px-4 mb-3 rounded-0 w-100"
+                >
+                  Add
+                </button>
+              ) : (
+                <button
+                  onClick={handleReset}
+                  type="button"
+                  class="btn btn-secondary mt-2 px-4 mb-3 rounded-0 w-100"
+                >
+                  Reset
+                </button>
+              )}
             </div>
           </div>
         </div>
