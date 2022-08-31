@@ -5,7 +5,7 @@ const Card = ({data, removeCard}) => {
   return (
     <div class="mb-3 px-3 py-2 btn-secondary rounded close c1">
     <div><span className="fr" onClick={() => removeCard(data.uid)}>X</span></div>
-      <h3 class="f-700">{nf.format(data.rem)}</h3>
+      <h3 class="f-700">{nf.format(data.rem/1000)}</h3>
       <div class="d-flex">
         <p>{data.date}</p>
    

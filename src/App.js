@@ -7,10 +7,10 @@ import { uid } from "uid";
 function App() {
   const [timer, setTimer] = useState(0);
   const [data, setdata] = useState([]);
-
   const [totaltimer, setTotalTimer] = useState(0);
+
   useEffect(() => {
-    if (timer >= totaltimer) {
+    if (timer >= totaltimer*1000) {
       handleReset();
     }
   }, [timer]);
@@ -29,12 +29,12 @@ function App() {
   let update = function () {
     tim = tim + 10;
     //date = moment(new Date());
-    setTimer(tim);
+    setTimer(timer => timer + 10);
     setdata((data) => [
       ...data,
       {
-        date: now.clone().format("DD/MM/YYYY hh:mm:ss"),
-        rem: totaltimer - tim,
+        date: moment().format("DD/MM/YYYY hh:mm:ss"),
+        rem: totaltimer*1000 - tim,
         uid: uid(),
       },
     ]);
@@ -58,6 +58,7 @@ function App() {
     const filtered = data.filter((x) => x.uid !== id);
     setdata(filtered);
   };
+  console.log(data);
   return (
     <div class="container py-5 my-5">
       <div class="row">
@@ -76,7 +77,7 @@ function App() {
             <input
               type="number"
               value={totaltimer}
-              onChange={(e) => setTotalTimer(e.target.value)}
+              onChange={(e) => setTotalTimer((e.target.value))}
               class="form-control rounded-0"
             />
             <div class="col-auto">
